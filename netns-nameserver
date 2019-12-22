@@ -1,0 +1,10 @@
+#! /bin/sh
+
+nameservers() {
+    env | sed -n 's/^foreign_option_[0-9]*=dhcp-option DNS/nameserver/p'
+}
+
+# ignore group domain
+
+mkdir -p /etc/netns/"$NETNS"
+nameservers > /etc/netns/"$NETNS"/resolv.conf

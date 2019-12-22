@@ -1,0 +1,22 @@
+#! /bin/sh
+
+# Execute all the 'ip' command in the network namespace "${NETNS}"
+
+# When openvpn is configured with 'redirect-gateway def1' it will try to add
+# routes for ip addresses of the host which produces errors.
+# From my current tests, 'redirect-gateway local' works fine
+
+# Create network namespace if it does not exist (simplify testing)
+# No idea why doing 'dev lo up' but was done in the original openvpn-netns
+if ! [ -e /var/run/netns/"$NETNS" ]; then
+    ip netns add "$NETNS" || exit
+    ip netns exec "$NETNS" ip link set dev lo up
+fi
+
+# Execute the command in the namespace
+if [ "link" = "$1" ]; then
+    # 'link' requires a different syntax as it should be run on the host
+    exec ip $@ netns "${NETNS}"
+else
+    exec ip netns exec "${NETNS}" ip $@
+fi
