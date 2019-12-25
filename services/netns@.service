@@ -1,0 +1,10 @@
+[Unit]
+Description=Named network namespace %I
+StopWhenUnneeded=true
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/bin/ip netns add %i
+ExecStart=/usr/bin/ip netns exec %i ip link set dev lo up
+ExecStop=/usr/bin/ip netns del %i

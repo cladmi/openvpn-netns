@@ -1,0 +1,11 @@
+[Unit]
+Description=Forward tcp port using socat to namespace-port %i
+StopWhenUnneeded=true
+
+[Service]
+Type=simple
+ExecStart=/bin/bash -c 'i=%i; \
+   cfg=( $${i//-/ } ); ns=$${cfg[0]}; port=$${cfg[1]}; \
+   /usr/bin/socat \
+   tcp-listen:$${port},fork,reuseaddr \
+   exec:"ip netns exec $${ns} /usr/bin/socat STDIO tcp-connect\:localhost\:$${port},nofork"'
