@@ -1,0 +1,36 @@
+# This is currently a testing PKGBUILD file.
+# Maintainer: Your Name <your.name@example.com>
+pkgname=transmission-openvpn-netns-git
+pkgver=20191227175521
+pkgrel=1
+pkgdesc=""
+arch=('any')
+url=""
+license=('Unlicense')
+groups=()
+depends=('transmission-cli' 'openvpn' 'openvpn-netns')
+makedepends=('git') # 'bzr', 'git', 'mercurial' or 'subversion'
+provides=("${pkgname%-git}")
+conflicts=("${pkgname%-git}")
+replaces=()
+backup=()
+options=()
+install=
+#source=('FOLDER::VCS+URL#FRAGMENT')
+source=()
+noextract=()
+#md5sums=('SKIP')
+md5sums=()
+
+pkgver() {
+	date +%Y%m%d%H%M%S
+}
+
+package() {
+	cd "$startdir"
+    mkdir -p "$pkgdir"/etc/systemd/system/transmission.service.d/
+	cp transmission-netns.conf "$pkgdir"/etc/systemd/system/transmission.service.d/override.conf
+
+    mkdir -p "$pkgdir"/etc/systemd/system/openvpn-client@transmission.service.d/
+    cp openvpn-netns.conf "$pkgdir"/etc/systemd/system/openvpn-client@transmission.service.d/override.conf
+}
