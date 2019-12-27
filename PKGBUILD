@@ -1,7 +1,7 @@
 # This is currently a testing PKGBUILD file.
 # Maintainer: Your Name <your.name@example.com>
-pkgname=systemd-netns-git
-pkgver=20191225092433
+pkgname=openvpn-netns-git
+pkgver=20191227173910
 pkgrel=1
 pkgdesc=""
 arch=('any')
@@ -35,4 +35,8 @@ package() {
 
 	mkdir -p "$pkgdir"/usr/share/"$pkgname"/
 	cp templates/service-netns.conf "$pkgdir"/usr/share/"$pkgname"/
+
+	mkdir -p "$pkgdir"/usr/bin
+	cp openvpn-netns-ip "$pkgdir"/usr/bin
+	cp openvpn-netns-nameserver "$pkgdir"/usr/bin
 }

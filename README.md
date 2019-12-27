@@ -19,10 +19,10 @@ Usage
 
     sudo openvpn \
         --setenv NETNS vpnns \
-        --iproute ./netns-ip \
-        --up ./netns-nameserver \
+        --iproute ./openvpn-netns-ip \
+        --up ./openvpn-netns-nameserver \
         --script-security 2 \
-        --config vpn.config
+        --config vpn.conf
 
 Put the 'services' files in '/usr/lib/systemd/system'
 Edit your service to add the configuration from 'template/service-netns.conf'
