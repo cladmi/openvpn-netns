@@ -39,11 +39,12 @@ re-started.
 Current state
 -------------
 
-* Openvpn configuration seems to be working
-  * No Systemd integration yet
+* Openvpn configuration
 * Create network namespace as a unit
 * Provide "tcp port forwarding" to the namespace using socat
 * Template to run a service inside the namespace
+* Example for a service that runs 'transmission' with a 'transmission'
+  namespace and vpn configuration.
 
 Implementation
 --------------
@@ -59,6 +60,6 @@ Implementation
 TODO
 ----
 
-* Systemd files
-  * openvpn
 * Automation for testing?
+* Documentation on how to test
+* Update documentation in the example.
