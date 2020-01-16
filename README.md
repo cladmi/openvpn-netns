@@ -24,6 +24,36 @@ Openvpn usage
         --up ./openvpn-netns-nameserver \
         --script-security 2 \
         --config vpn.conf
+    # Wait for the vpn to be configured
+
+### Checking ###
+
+    # In another terminal show that the vpn is working inside:
+    sudo ip netns exec vpnns ip route
+    default via 4.3.2.1 dev tun0
+    4.3.2.1/27 dev tun0 proto kernel scope link src 4.3.2.10
+
+    sudo ip netns exec vpnns cat /etc/resolv.conf
+    nameserver 4.3.2.1
+
+    sudo ip netns exec vpnns ping -c 3 9.9.9.9
+    PING 9.9.9.9 (9.9.9.9) 56(84) bytes of data.
+    64 bytes from 9.9.9.9: icmp_seq=1 ttl=60 time=185 ms
+    64 bytes from 9.9.9.9: icmp_seq=2 ttl=60 time=107 ms
+    64 bytes from 9.9.9.9: icmp_seq=3 ttl=60 time=163 ms
+
+    --- 9.9.9.9 ping statistics ---
+    3 packets transmitted, 3 received, 0% packet loss, time 2001ms
+    rtt min/avg/max/mdev = 107.032/151.707/185.270/32.892 ms
+
+    # Traceroute goes through the vpn
+    sudo ip netns exec vpnns traceroute 9.9.9.9
+    traceroute to 9.9.9.9 (9.9.9.9), 30 hops max, 60 byte packets
+     1  _gateway (4.3.2.1)  105.501 ms  105.840 ms  106.127 ms
+     2  * * *
+     3  * * *
+     4  * * *
+     5  dns9.quad9.net (9.9.9.9)  129.345 ms !X  49.028 ms !X  84.534 ms !X
 
 Put the 'services' files in '/usr/lib/systemd/system'
 Edit your service to add the configuration from 'template/service-netns.conf'
