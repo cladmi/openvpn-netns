@@ -14,9 +14,10 @@ Now only the 'resolv.conf' handling is kept as '--up' script.
 https://discourse.nixos.org/t/run-systemd-service-in-network-namespace/3179/6
 https://github.com/systemd/systemd/issues/2741 Many examples
 
-Usage
------
+Openvpn usage
+-------------
 
+    sudo ip netns add vpnns
     sudo openvpn \
         --setenv NETNS vpnns \
         --iproute ./openvpn-netns-ip \
