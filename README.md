@@ -1,8 +1,14 @@
 Openvpn-netns
 =============
 
-Run openvpn inside a network namespace so it can be used only by some
-applications.
+Run openvpn to configure network inside a network namespace so it can be used
+only by some applications.
+
+The idea is that openvpn is run on the host, but puts the tun interface `up`
+inside the network namespace. The ip configuration will also be done in the
+namespace.
+For the dns, edit the the network namespace resolv.conf file stored in
+`/etc/netns/NAMESPACENAME/resolv.conf`.
 
 I wrote this version after reading
 [pekman/openvpn-netns](https://github.com/pekman/openvpn-netns)
@@ -55,17 +61,38 @@ Openvpn usage
      4  * * *
      5  dns9.quad9.net (9.9.9.9)  129.345 ms !X  49.028 ms !X  84.534 ms !X
 
-Put the 'services' files in '/usr/lib/systemd/system'
-Edit your service to add the configuration from 'template/service-netns.conf'
 
-Design
-------
+Systemd integration
+-------------------
 
-Creating the network namespace, running the application, running the VPN are
-3 different steps.
+The systemd integration is made of different units for each functionnality:
 
-I would like to have them as different systemd units so they could be
-re-started.
+* Creating the network namespace
+* openvpn service to have vpn networking inside the namespace
+ * Implemented as an 'override.conf' file
+* Run the application inside the workspace
+* Optional:
+ * socat tcp redirection to access on the host a socket in the namespace
+
+
+Implementation detail
+---------------------
+
+A service creates the network namespace, and for simplicity, puts the loopback
+interface up.
+The application your want to run, uses this namespace using the
+`NetworkNamespacePath=/var/run/netns/NETNSNAME` option and binds to the `netns`
+unit.
+
+Usage
+-----
+
+* Put the 'services' files in '/usr/lib/systemd/system'
+* Edit your 'openvpn-client@CONFIG.service' to use the network namespace
+ * See 'templates/openvpn-netns.conf'
+* Edit your service to use the network namespace
+ * See 'templates/service-netns.conf'
+
 
 Current state
 -------------
