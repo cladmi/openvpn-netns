@@ -120,4 +120,3 @@ TODO
 
 * Automation for testing?
 * Documentation on how to test
-* Update documentation in the example.
