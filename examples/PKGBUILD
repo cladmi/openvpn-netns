@@ -1,7 +1,7 @@
 # This is currently a testing PKGBUILD file.
 # Maintainer: Your Name <your.name@example.com>
 pkgname=transmission-openvpn-netns-git
-pkgver=20200116200503
+pkgver=20200123154550
 pkgrel=1
 pkgdesc=""
 arch=('any')
