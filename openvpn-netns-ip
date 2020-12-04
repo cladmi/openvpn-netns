@@ -6,10 +6,16 @@
 # routes for ip addresses of the host which produces errors.
 # From my current tests, 'redirect-gateway local' works fine
 
-# Execute the command in the namespace
-if [ "link" = "$1" ]; then
-    # 'link' requires a different syntax as it should be run on the host
+tun_in_netns()
+{
+    ip -n "${NETNS}" link show dev "$1" >/dev/null 2>&1
+}
+
+TUN="$4"
+if [ "link" = "$1" ] && ( ! tun_in_netns "${TUN}" ); then
+    # 'link' requires a different syntax when the interface is on the host
     exec ip $@ netns "${NETNS}"
 else
-    exec ip netns exec "${NETNS}" ip $@
+    # Execute the command in the namespace
+    exec ip -n "${NETNS}" $@
 fi
